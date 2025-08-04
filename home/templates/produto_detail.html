@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>{{ produto.nome }}</title>
@@ -19,7 +20,7 @@
             margin: auto;
             background: #fff;
             border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
 
@@ -117,7 +118,9 @@
             padding: 10px;
         }
 
-        select, textarea, button {
+        select,
+        textarea,
+        button {
             font-size: 16px;
         }
 
@@ -129,63 +132,119 @@
             border-radius: 6px;
             cursor: pointer;
         }
+
+        .topbar {
+            background-color: #007bff;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .nav a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .carrinho-icon {
+            font-size: 20px;
+        }
+
+        .contador {
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            border-radius: 50%;
+            padding: 3px 7px;
+            position: absolute;
+            top: -8px;
+            right: -10px;
+        }
+        
     </style>
 </head>
+
 <body>
-<div class="container">
-    <div class="produto">
-        <div class="imagem">
-            <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
-        </div>
-        <div class="info">
-            <h1>{{ produto.nome }}</h1>
-            <p>{{ produto.descricao }}</p>
-            <p class="preco">R$ {{ produto.preco }}</p>
-            <p class="estoque">Estoque disponível: {{ produto.estoque }}</p>
 
-            <form method="post" >
-                {% csrf_token %}
-                <div class="quantidade">
-                    <label for="quantidade">Quantidade:</label>
-                    <input type="number" name="quantidade" id="quantidade" value="1" min="1" max="{{ produto.estoque }}">
+    <body>
+        <header class="topbar">
+            <div class="logo">
+                <a href="/" style="color: white; font-weight: bold; text-decoration: none;">MinhaLoja</a>
+            </div>
+            <nav class="nav">
+                <a href="{% url 'login' %}">Login</a>
+                <a href="{% url 'cadastro' %}">Cadastre-se</a>
+                <a href="{% url 'carrinho' %}" class="carrinho-icon">
+                    🛒
+                    {% if request.session.carrinho %}
+                    <span class="contador">{{ request.session.carrinho|length }}</span>
+                    {% else %}
+                    <span class="contador">0</span>
+                    {% endif %}
+                </a>
+            </nav>
+        </header>
+
+        <div class="container">
+            <div class="produto">
+                <div class="imagem">
+                    <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}">
                 </div>
-                <button class="btn-comprar" type="submit">Comprar</button>
+                <div class="info">
+                    <h1>{{ produto.nome }}</h1>
+                    <p>{{ produto.descricao }}</p>
+                    <p class="preco">R$ {{ produto.preco }}</p>
+                    <p class="estoque">Estoque disponível: {{ produto.estoque }}</p>
+
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="quantidade">
+                            <label for="quantidade">Quantidade:</label>
+                            <input type="number" name="quantidade" id="quantidade" value="1" min="1"
+                                max="{{ produto.estoque }}">
+                        </div>
+                        <button class="btn-comprar" type="submit">Comprar</button>
+                    </form>
+
+                    <div class="formas-pagamento">
+                        <strong>Formas de pagamento:</strong>
+                        <p>{{ produto.formas_pagamento }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="avaliacoes">
+                <h2>Avaliações</h2>
+                {% for avaliacao in avaliacoes %}
+                <div class="avaliacao">
+                    <strong>{{ avaliacao.usuario.username }}</strong> - {{ avaliacao.data|date:"d/m/Y" }}<br>
+                    Nota: {{ avaliacao.nota }} ⭐<br>
+                    <p>{{ avaliacao.comentario }}</p>
+                </div>
+                {% empty %}
+                <p>Nenhuma avaliação ainda.</p>
+                {% endfor %}
+            </div>
+
+            <form method="post" class="avaliar">
+                {% csrf_token %}
+                <h2>Deixe sua avaliação</h2>
+                <label for="nota">Nota:</label>
+                <select name="nota" id="nota" required>
+                    <option value="">Selecione</option>
+                    {% for i in "12345" %}
+                    <option value="{{ i }}">{{ i }} ⭐</option>
+                    {% endfor %}
+                </select><br>
+                <label for="comentario">Comentário:</label>
+                <textarea name="comentario" id="comentario" required></textarea>
+                <button type="submit">Enviar Avaliação</button>
             </form>
-
-            <div class="formas-pagamento">
-                <strong>Formas de pagamento:</strong>
-                <p>{{ produto.formas_pagamento }}</p>
-            </div>
         </div>
-    </div>
+    </body>
 
-    <div class="avaliacoes">
-        <h2>Avaliações</h2>
-        {% for avaliacao in avaliacoes %}
-            <div class="avaliacao">
-                <strong>{{ avaliacao.usuario.username }}</strong> - {{ avaliacao.data|date:"d/m/Y" }}<br>
-                Nota: {{ avaliacao.nota }} ⭐<br>
-                <p>{{ avaliacao.comentario }}</p>
-            </div>
-        {% empty %}
-            <p>Nenhuma avaliação ainda.</p>
-        {% endfor %}
-    </div>
-
-    <form method="post" class="avaliar" >
-        {% csrf_token %}
-        <h2>Deixe sua avaliação</h2>
-        <label for="nota">Nota:</label>
-        <select name="nota" id="nota" required>
-            <option value="">Selecione</option>
-            {% for i in "12345" %}
-                <option value="{{ i }}">{{ i }} ⭐</option>
-            {% endfor %}
-        </select><br>
-        <label for="comentario">Comentário:</label>
-        <textarea name="comentario" id="comentario" required></textarea>
-        <button type="submit">Enviar Avaliação</button>
-    </form>
-</div>
-</body>
 </html>

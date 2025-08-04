@@ -20,11 +20,16 @@ from home.views import ProdutoDetailView
 from django.conf import settings
 from django.conf.urls.static import static
 from django.urls import path, include
+from home.views import HomeView, adicionar_ao_carrinho, remover_do_carrinho, atualizar_quantidade
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('produto/<int:pk/', ProdutoDetailView.as_view(), name='produto_detail'),
     path('', include('home.urls')),
+    path('', HomeView.as_view(), name='home'),
+    path('adicionar/<int:produto_id>/', adicionar_ao_carrinho, name='adicionar_ao_carrinho'),
+    path('remover/<int:produto_id>/', remover_do_carrinho, name='remover_do_carrinho'),
+    path('atualizar/<int:produto_id>/', atualizar_quantidade, name='atualizar_quantidade'),
 ]
 
 if settings.DEBUG:

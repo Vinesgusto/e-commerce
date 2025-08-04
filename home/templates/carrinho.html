@@ -1,0 +1,112 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Carrinho de Compras</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f1f1;
+        }
+
+        .total {
+            text-align: right;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .vazio {
+            text-align: center;
+            color: #666;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Seu Carrinho</h2>
+        {% if itens %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in itens %}
+                <tr>
+                    <td>{{ item.produto.nome }}</td>
+                    <td>{{ item.quantidade }}</td>
+                    <td>R$ {{ item.subtotal|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="total">Total: R$ {{ total|floatformat:2 }}</p>
+        {% else %}
+        <p class="vazio">Seu carrinho está vazio.</p>
+        {% endif %}
+        <a href="/produto/1/">Voltar para a loja</a>
+    </div>
+    {% for produto_id, item in request.session.carrinho.items %}
+    <tr>
+        <td>{{ item.nome }}</td>
+        <td>
+            <form method="post" action="{% url 'atualizar_quantidade' produto_id %}">
+                {% csrf_token %}
+                <input type="number" name="quantidade" value="{{ item.quantidade }}" min="1">
+                <button type="submit">Atualizar</button>
+            </form>
+        </td>
+        <td>R$ {{ item.preco|floatformat:2 }}</td>
+        <td>R$ {{ item.preco|floatformat:2|add:item.quantidade|floatformat:2 }}</td>
+        <td>
+            <a href="{% url 'remover_do_carrinho' produto_id %}">Remover</a>
+        </td>
+    </tr>
+    {% endfor %}
+</body>
+
+</html>
