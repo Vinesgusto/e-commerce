@@ -2,74 +2,119 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Cadastro</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            background: #f8f9fa;
-            font-family: Arial, sans-serif;
-        }
+  <meta charset="UTF-8">
+  <title>Cadastro - Minha Loja</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * { box-sizing: border-box; }
 
-        .container {
-            max-width: 400px;
-            margin: 80px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.1);
-        }
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #c8d6fd, #fff);
+      font-family: 'Segoe UI', sans-serif;
+    }
 
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #28a745;
-        }
+    .container {
+      max-width: 420px;
+      margin: 80px auto;
+      background: #fff;
+      padding: 40px 30px;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+    }
 
-        form {
-            display: flex;
-            flex-direction: column;
-        }
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #007bff;
+      font-weight: bold;
+      font-size: 26px;
+    }
 
-        label, input {
-            margin-bottom: 15px;
-        }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
 
-        input {
-            padding: 10px;
-            font-size: 16px;
-        }
+    .form-group {
+      margin-bottom: 18px;
+    }
 
-        button {
-            background: #28a745;
-            color: white;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-        }
+    label {
+      font-weight: 500;
+      margin-bottom: 6px;
+      display: block;
+      color: #333;
+    }
 
-        p {
-            text-align: center;
-            margin-top: 15px;
-        }
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+      transition: border-color 0.3s ease;
+    }
 
-        a {
-            color: #007bff;
-            text-decoration: none;
-        }
-    </style>
+    input:focus {
+      border-color: #007bff;
+      outline: none;
+    }
+
+    button {
+      margin-top: 15px;
+      background: #007bff;
+      border: none;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #007bff;
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .login-link a {
+      color: #007bff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
     <div class="container">
-        <h2>Cadastre-se</h2>
+        <h2>Crie sua conta</h2>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Criar Conta</button>
+            <label for="id_username">Usuário</label>
+            <input type="text" name="username" id="id_username" required>
+
+            <label for="id_email">Email</label>
+            <input type="email" name="email" id="id_email" required>
+
+            <label for="id_password1">Senha</label>
+            <input type="password" name="password1" id="id_password1" required>
+
+            <label for="id_password2">Confirme a senha</label>
+            <input type="password" name="password2" id="id_password2" required>
+
+            <button type="submit">Cadastrar</button>
         </form>
-        <p>Já tem conta? <a href="{% url 'login' %}">Entrar</a></p>
+        <p class="login-link">Já tem conta? <a href="{% url 'login' %}">Entrar</a></p>
     </div>
 </body>
 </html>

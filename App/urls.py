@@ -30,7 +30,9 @@ urlpatterns = [
     path('adicionar/<int:produto_id>/', adicionar_ao_carrinho, name='adicionar_ao_carrinho'),
     path('remover/<int:produto_id>/', remover_do_carrinho, name='remover_do_carrinho'),
     path('atualizar/<int:produto_id>/', atualizar_quantidade, name='atualizar_quantidade'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    

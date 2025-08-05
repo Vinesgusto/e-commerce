@@ -1,8 +1,7 @@
-from django.shortcuts import render
-
 # views.py
-from django.shortcuts import redirect, get_object_or_404, render
+from django.shortcuts import render,redirect, get_object_or_404, render
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth import authenticate, login
 from django.views.generic.edit import CreateView
 from django.views.generic import DetailView
 from django.views.generic import ListView
@@ -28,6 +27,13 @@ class CadastroUsuario(CreateView):
     template_name = 'cadastro.html'
     form_class = CadastroForm
     success_url = reverse_lazy('login')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        user = form.save()
+        login(self.request, user)
+        return redirect(self.success_url)
+    
 class ProdutoDetailView(DetailView):
     model = Produto
     template_name = 'produto_detail.html'
@@ -101,7 +107,7 @@ class CarrinhoView(View):
         carrinho_itens = []
         total = 0
         for produto in produtos:
-            quantidade = carrinho[str(produto.id)]
+            quantidade = carrinho[str(produto.id)]['quantidade']
             subtotal = quantidade * produto.preco
             total += subtotal
             carrinho_itens.append({
