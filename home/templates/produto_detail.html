@@ -87,6 +87,7 @@
             border-radius: 6px;
             text-decoration: none;
             font-weight: bold;
+            border: none;
         }
 
         .topbar {
@@ -133,9 +134,7 @@
             width: 80%;
             aspect-ratio: 9 / 16;
             object-fit: cover;
-            /* corta excesso, preenche tudo */
             background-color: black;
-            /* caso falhe o carregamento */
             display: block;
         }
 
@@ -143,11 +142,180 @@
         .swiper-slide video {
             width: 80%;
             aspect-ratio: 9 / 16;
-            /* mantém proporção vertical */
             object-fit: cover;
-            /* preenche cortando o excesso */
             background-color: #000;
             display: block;
+        }
+
+        /* ------------------- */
+        /* Estilos Avaliações  */
+        /* ------------------- */
+        .avaliacoes {
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .avaliacoes h2 {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .avaliacao {
+            background: #f9f9f9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .avaliacao strong {
+            color: #222;
+        }
+
+        .avaliacao small {
+            color: #777;
+            font-size: 12px;
+        }
+
+        .avaliacao p {
+            margin-top: 8px;
+            font-size: 15px;
+            color: #444;
+        }
+
+        .avaliar {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .avaliar h2 {
+            margin-bottom: 15px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .avaliar label {
+            display: block;
+            font-weight: bold;
+            margin: 10px 0 5px;
+            color: #444;
+        }
+
+        .avaliar select,
+        .avaliar textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            transition: border 0.3s;
+        }
+
+        .avaliar select:focus,
+        .avaliar textarea:focus {
+            border-color: #28a745;
+        }
+
+        .avaliar textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .avaliar button {
+            margin-top: 15px;
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .avaliar button:hover {
+            background: #218838;
+        }
+
+        /* Card de aviso de login */
+        .aviso-login {
+            background: #fff8e6;
+            border: 2px solid #ffc107;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .aviso-login h2 {
+            color: #b35c00;
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .aviso-login p {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        /* Botões de login/cadastro */
+        .botoes-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-login,
+        .btn-cadastro {
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-login {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-login:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-cadastro {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-cadastro:hover {
+            background-color: #1e7e34;
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-logout:hover {
+            background-color: #b02a37;
         }
     </style>
 </head>
@@ -160,14 +328,23 @@
             </a>
         </div>
         <nav class="nav">
+            {% if user.is_anonymous %}
             <a href="{% url 'login' %}">Login</a>
             <a href="{% url 'cadastro' %}">Cadastre-se</a>
             <a href="{% url 'carrinho' %}" class="carrinho-icon">
-                🛒
                 {% if request.session.carrinho %}
+                🛒
                 <span class="contador">{{ request.session.carrinho|length }}</span>
                 {% else %}
                 <span class="contador">0</span>
+                {% endif %}
+                {% endif %}
+
+                {% if request.user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout">Sair</button>
+                </form>
                 {% endif %}
             </a>
         </nav>
@@ -200,14 +377,12 @@
                     {% endif %}
                 </div>
 
-
                 <!-- Botões de navegação -->
                 <div class="swiper-button-next"></div>
                 <div class="swiper-button-prev"></div>
                 <!-- Paginação -->
                 <div class="swiper-pagination"></div>
             </div>
-
 
             <div class="info">
                 <h1>{{ produto.nome }}</h1>
@@ -232,19 +407,28 @@
             </div>
         </div>
 
+        <!-- Avaliações -->
         <div class="avaliacoes">
             <h2>Avaliações</h2>
             {% for avaliacao in avaliacoes %}
             <div class="avaliacao">
-                <strong>{{ avaliacao.usuario.username }}</strong> - {{ avaliacao.data|date:"d/m/Y" }}<br>
-                Nota: {{ avaliacao.nota }} ⭐<br>
+                <div class="d-flex justify-content-between">
+                    <strong>{{ avaliacao.usuario.username }}</strong>
+                    <small>{{ avaliacao.data|date:"d/m/Y" }}</small>
+                </div>
+                <div class="text-warning">
+                    {% for i in "12345"|slice:":avaliacao.nota"|make_list %}
+                    ⭐
+                    {% endfor %}
+                </div>
                 <p>{{ avaliacao.comentario }}</p>
             </div>
             {% empty %}
             <p>Nenhuma avaliação ainda.</p>
             {% endfor %}
         </div>
-
+        {% if request.user.is_authenticated %}
+        <!-- Formulário Avaliação -->
         <form method="post" class="avaliar">
             {% csrf_token %}
             <h2>Deixe sua avaliação</h2>
@@ -254,11 +438,22 @@
                 {% for i in "12345" %}
                 <option value="{{ i }}">{{ i }} ⭐</option>
                 {% endfor %}
-            </select><br>
+            </select>
             <label for="comentario">Comentário:</label>
             <textarea name="comentario" id="comentario" required></textarea>
             <button type="submit">Enviar Avaliação</button>
         </form>
+        {% else %}
+        <!-- Mensagem para não logados -->
+        <div class="avaliar aviso-login">
+            <h2>Quer deixar sua avaliação?</h2>
+            <p>Você precisa estar logado para comentar.</p>
+            <div class="botoes-login">
+                <a href="{% url 'login' %}" class="btn-login">Fazer Login</a>
+                <a href="{% url 'cadastro' %}" class="btn-cadastro">Criar Conta</a>
+            </div>
+        </div>
+        {% endif %}
     </div>
 
     <!-- Scripts -->

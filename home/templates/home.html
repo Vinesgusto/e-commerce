@@ -82,13 +82,28 @@
 
         .btn {
             margin-top: 10px;
-            background: #2c3892;
+            background: #007bff;
             color: white;
             padding: 8px 12px;
             border: none;
             border-radius: 5px;
             text-decoration: none;
             display: inline-block;
+        }
+
+        .btn-logout {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-logout:hover {
+            background-color: #b02a37;
         }
     </style>
 </head>
@@ -101,6 +116,7 @@
             </a>
         </div>
         <nav class="nav">
+            {% if user.is_anonymous %}
             <a href="{% url 'login' %}">Login</a>
             <a href="{% url 'cadastro' %}">Cadastre-se</a>
             <a href="{% url 'carrinho' %}" class="carrinho-icon">
@@ -109,6 +125,13 @@
                 <span class="contador">{{ request.session.carrinho|length }}</span>
                 {% else %}
                 <span class="contador">0</span>
+                {% endif %}
+                {% endif %}
+                {% if request.user.is_authenticated %}
+                <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-logout">Sair</button>
+                </form>
                 {% endif %}
             </a>
         </nav>
