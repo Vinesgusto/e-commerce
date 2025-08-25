@@ -1,6 +1,7 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <title>Loja - Produtos</title>
@@ -10,6 +11,45 @@
             font-family: Arial, sans-serif;
             background: #f8f9fa;
             padding: 20px;
+        }
+
+        .topbar {
+            background-color: #2c3892;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 30px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .nav a {
+            color: white;
+            margin-left: 20px;
+            font-size: 18px;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .carrinho-icon {
+            font-size: 30px;
+        }
+
+        .contador {
+            background-color: red;
+            color: white;
+            font-size: 12px;
+            border-radius: 50%;
+            padding: 3px 7px;
+            position: absolute;
+            top: -8px;
+            right: -10px;
+        }
+
+        .logo-img {
+            height: 80px;
+            width: auto;
+            object-fit: contain;
         }
 
         .grid {
@@ -22,12 +62,12 @@
             background: white;
             border-radius: 8px;
             padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
         .card img {
-            max-width: 100%;
+            max-width: 50%;
             height: auto;
         }
 
@@ -42,7 +82,7 @@
 
         .btn {
             margin-top: 10px;
-            background: #007bff;
+            background: #2c3892;
             color: white;
             padding: 8px 12px;
             border: none;
@@ -52,7 +92,27 @@
         }
     </style>
 </head>
+
 <body>
+    <header class="topbar">
+        <div class="logo">
+            <a href="{% url 'home'%}" style="color: white; font-weight: bold; text-decoration: none;">
+                <img src="{% static 'home/novoconceito.png' %}" alt="Logo" class="logo-img">
+            </a>
+        </div>
+        <nav class="nav">
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'cadastro' %}">Cadastre-se</a>
+            <a href="{% url 'carrinho' %}" class="carrinho-icon">
+                🛒
+                {% if request.session.carrinho %}
+                <span class="contador">{{ request.session.carrinho|length }}</span>
+                {% else %}
+                <span class="contador">0</span>
+                {% endif %}
+            </a>
+        </nav>
+    </header>
     <h1>Produtos</h1>
     <div class="grid">
         {% for produto in produtos %}
@@ -65,4 +125,5 @@
         {% endfor %}
     </div>
 </body>
+
 </html>

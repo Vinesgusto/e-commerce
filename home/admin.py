@@ -1,6 +1,11 @@
 from django.contrib import admin
-from .models import Produto, Avaliacao
+from .models import Produto, Avaliacao, ImagemProduto
 from django.utils.html import format_html
+
+
+class ImagemProdutoInline(admin.TabularInline):
+    model = ImagemProduto
+    extra = 1
 
 @admin.register(Produto)
 class ProdutoAdmin(admin.ModelAdmin):
@@ -21,4 +26,5 @@ class AvaliacaoAdmin(admin.ModelAdmin):
     list_filter = ('nota', 'data')
 
 
+admin.site.register(ImagemProduto)
 # Register your models here.
