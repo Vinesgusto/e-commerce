@@ -101,9 +101,28 @@
             cursor: pointer;
             transition: 0.3s;
         }
+        nav li {
+            margin: 0 10px;
+            display: inline;
+            font-size: 18px;
+            list-style: none;
+            color: white;
+            font-weight: bold;
+            text-transform: capitalize;
+
+        }
 
         .btn-logout:hover {
             background-color: #b02a37;
+        }
+        a.perfil {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: 0.3s;
         }
     </style>
 </head>
@@ -116,7 +135,11 @@
             </a>
         </div>
         <nav class="nav">
-            {% if user.is_anonymous %}
+            {% if user.is_authenticated %}
+            <li>Olá, {{ user.username }}</li>
+            <a href="{% url 'profile' %}" class="perfil">Perfil</a>
+            {% endif %}
+            {% if not user.is_authenticated %}
             <a href="{% url 'login' %}">Login</a>
             <a href="{% url 'cadastro' %}">Cadastre-se</a>
             <a href="{% url 'carrinho' %}" class="carrinho-icon">

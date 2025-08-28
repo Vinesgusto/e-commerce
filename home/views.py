@@ -17,22 +17,6 @@ class HomeView(ListView):
     template_name = 'home.html'
     context_object_name = 'produtos'
 
-class LoginUsuario(LoginView):
-    template_name = 'login.html'
-
-class LogoutUsuario(LogoutView):
-    next_page = reverse_lazy('home')
-
-class CadastroUsuario(CreateView):
-    template_name = 'cadastro.html'
-    form_class = CadastroForm
-    success_url = reverse_lazy('login')
-
-    def form_valid(self, form):
-        response = super().form_valid(form)
-        user = form.save()
-        login(self.request, user)
-        return redirect(self.success_url)
     
 class ProdutoDetailView(DetailView):
     model = Produto
