@@ -317,6 +317,53 @@
         .btn-logout:hover {
             background-color: #b02a37;
         }
+
+        nav li {
+            margin: 0 10px;
+            margin-top: 5px;
+            display: inline;
+            font-size: 18px;
+            list-style: none;
+            color: white;
+            font-weight: bold;
+            text-transform: capitalize;
+
+        }
+        a.perfil {
+            background-color: #3498db;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .nav a {
+            background-color: #3498db;
+            color: white;
+            margin-right: 10px;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+        .nav a:hover {
+            background-color: #2980b9;
+        }
+        .btn {
+            margin-top: 10px;
+            background: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
     </style>
 </head>
 
@@ -328,6 +375,8 @@
             </a>
         </div>
         <nav class="nav">
+            <li>Olá, {{ user.username }}</li>
+            <a href="{% url 'profile' %}" class="perfil">Perfil</a>
             {% if user.is_anonymous %}
             <a href="{% url 'login' %}">Login</a>
             <a href="{% url 'cadastro' %}">Cadastre-se</a>
@@ -350,7 +399,7 @@
         </nav>
     </header>
 
-    <div class="container">
+    <div class="container-start " style="padding-left: 250px; padding-top: 30px;">
         <div class="produto">
             <!-- Carrossel Swiper -->
             <div class="swiper mySwiper">
